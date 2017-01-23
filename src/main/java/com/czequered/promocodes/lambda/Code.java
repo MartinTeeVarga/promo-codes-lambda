@@ -5,9 +5,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-/**
- * Created by Martin on 22/01/2017.
- */
 @DynamoDBTable(tableName = "code")
 public class Code {
     private String game;
@@ -69,5 +66,32 @@ public class Code {
 
     public void setPayload(String payload) {
         this.payload = payload;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Code code1 = (Code) o;
+
+        if (!game.equals(code1.game)) return false;
+        if (!code.equals(code1.code)) return false;
+        if (from != null ? !from.equals(code1.from) : code1.from != null) return false;
+        if (to != null ? !to.equals(code1.to) : code1.to != null) return false;
+        if (pub != null ? !pub.equals(code1.pub) : code1.pub != null) return false;
+        return payload != null ? payload.equals(code1.payload) : code1.payload == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = game.hashCode();
+        result = 31 * result + code.hashCode();
+        result = 31 * result + (from != null ? from.hashCode() : 0);
+        result = 31 * result + (to != null ? to.hashCode() : 0);
+        result = 31 * result + (pub != null ? pub.hashCode() : 0);
+        result = 31 * result + (payload != null ? payload.hashCode() : 0);
+        return result;
     }
 }

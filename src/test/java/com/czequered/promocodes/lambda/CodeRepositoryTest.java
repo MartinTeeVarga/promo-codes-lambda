@@ -1,63 +1,50 @@
 package com.czequered.promocodes.lambda;
 
-import org.junit.After;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-/**
- * Created by Martin on 22/01/2017.
- */
 public class CodeRepositoryTest {
-//    AmazonDynamoDB dynamoDB;
+    DynamoDBMapper mapper;
 
     @Before
     public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
+        mapper = mock(DynamoDBMapper.class);
     }
 
     @Test
-    public void handleRequest() throws Exception {
-        CodeRepository cr = new CodeRepository();
+    public void handleRequestOk() throws Exception {
+        Code returnCode = createCode("test", "PUB1", "2012-01-23T10:02:46+00:00", "2037-01-23T10:02:46+00:00", true, "Hello");
+
+        CodeRepository cr = new CodeRepository(mapper);
         Code codeRequest = new Code();
         codeRequest.setGame("test");
         codeRequest.setCode("PUB1");
+
+        when(mapper.load(codeRequest)).thenReturn(returnCode);
+
         Code code = cr.find(codeRequest);
         assertEquals("test", code.getGame());
         assertEquals("PUB1", code.getCode());
+        assertEquals("2012-01-23T10:02:46+00:00", code.getFrom());
+        assertEquals("2037-01-23T10:02:46+00:00", code.getTo());
         assertEquals(true, code.getPub());
+        assertEquals("Hello", code.getPayload());
     }
-//
-//    @Test
-//    public void blahTest() throws Exception {
-//
-//        final String[] localArgs = {"-inMemory"};
-//        DynamoDBProxyServer server = null;
-//        try {
-//            server = ServerRunner.createServerFromCommandLineArgs(localArgs);
-//            server.start();
-//            AmazonDynamoDBClient dynamodb = new AmazonDynamoDBClient();
-//            dynamodb.setEndpoint("http://localhost:8000");
-//
-//            // use the DynamoDB API over HTTP
-//            listTables(dynamodb.listTables(), "DynamoDB Local over HTTP");
-//        } finally {
-//            // Stop the DynamoDB Local endpoint
-//            if (server != null) {
-//                server.stop();
-//            }
-//        }
-//    }
-//
-//    public static void listTables(ListTablesResult result, String method) {
-//        System.out.println("found " + Integer.toString(result.getTableNames().size()) + " tables with " + method);
-//        for (String table : result.getTableNames()) {
-//            System.out.println(table);
-//        }
-//    }
+
+    private Code createCode(String game, String code, String from, String to, boolean pub, String payload) {
+        Code returnCode = new Code();
+        returnCode.setGame(game);
+        returnCode.setCode(code);
+        returnCode.setFrom(from);
+        returnCode.setTo(to);
+        returnCode.setPub(pub);
+        returnCode.setPayload(payload);
+        return returnCode;
+    }
 
 }

@@ -1,31 +1,29 @@
 package com.czequered.promocodes.lambda;
 
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 
-/**
- * Created by Martin on 22/01/2017.
- */
+import static com.amazonaws.util.StringUtils.isNullOrEmpty;
+
 public class CodeRepository {
     private static final String BAD_REQUEST = "400";
     private static final String NOT_FOUND = "404";
     private static final String GONE = "410";
+    private DynamoDBMapper mapper;
+
+    public CodeRepository(DynamoDBMapper mapper) {
+        this.mapper = mapper;
+    }
 
 
     public Code find(Code codeRequest) {
-        if (codeRequest == null || codeRequest.getGame() == null || codeRequest.getCode() == null) {
+        if (isNullOrEmpty(codeRequest.getCode()) || isNullOrEmpty(codeRequest.getGame()) || isNullOrEmpty(codeRequest.getCode())) {
             throw new RuntimeException(BAD_REQUEST);
         }
 
-        AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-        client.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2)); // setting from ~/.aws/config is ignored
-        DynamoDBMapper mapper = new DynamoDBMapper(client);
         Code loaded = mapper.load(codeRequest);
 
         if (loaded == null) {
