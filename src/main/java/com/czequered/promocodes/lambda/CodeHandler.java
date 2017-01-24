@@ -13,7 +13,7 @@ public class CodeHandler implements RequestHandler<Code, Code> {
 
     public CodeHandler() {
         AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-        client.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2)); // setting from ~/.aws/config is ignored
+        client.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_2));
         this.mapper = new DynamoDBMapper(client);
     }
 

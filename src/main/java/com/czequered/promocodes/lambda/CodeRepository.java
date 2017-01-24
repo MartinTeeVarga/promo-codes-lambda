@@ -9,9 +9,9 @@ import java.time.temporal.TemporalAccessor;
 import static com.amazonaws.util.StringUtils.isNullOrEmpty;
 
 public class CodeRepository {
-    private static final String BAD_REQUEST = "400";
-    private static final String NOT_FOUND = "404";
-    private static final String GONE = "410";
+    private static final String BAD_REQUEST = "[Bad Request] Both game and code parameters must be specified.";
+    private static final String NOT_FOUND = "[Not Found] The game or code does not exist.";
+    private static final String GONE = "[Gone] The code is no longer valid.";
     private DynamoDBMapper mapper;
 
     public CodeRepository(DynamoDBMapper mapper) {
@@ -20,7 +20,7 @@ public class CodeRepository {
 
 
     public Code find(Code codeRequest) {
-        if (isNullOrEmpty(codeRequest.getCode()) || isNullOrEmpty(codeRequest.getGame()) || isNullOrEmpty(codeRequest.getCode())) {
+        if (codeRequest == null || isNullOrEmpty(codeRequest.getGame()) || isNullOrEmpty(codeRequest.getCode())) {
             throw new RuntimeException(BAD_REQUEST);
         }
 
