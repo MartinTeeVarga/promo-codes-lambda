@@ -1,4 +1,4 @@
-package com.czequered.promocodes.lambda;
+package com.czequered.promocodes.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;

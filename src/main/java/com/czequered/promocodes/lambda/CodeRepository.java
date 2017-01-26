@@ -1,6 +1,7 @@
 package com.czequered.promocodes.lambda;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.czequered.promocodes.model.Code;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
